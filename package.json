@@ -9,6 +9,7 @@
     "parcel": "^2.0.0-beta.1"
   },
   "dependencies": {
+    "gsap": "^3.5.1",
     "pixi.js": "^5.3.3"
   }
 }
