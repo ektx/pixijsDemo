@@ -1,61 +1,52 @@
 import * as PIXI from 'pixi.js'
-import gasp, { TweenMax, TimelineLite, PixiPlugin, Power0 } from 'gsap/all'
+import gasp, { PixiPlugin, Power0 } from 'gsap/all'
 
 // 注册插件
 gasp.registerPlugin(PixiPlugin)
 PixiPlugin.registerPIXI(PIXI)
 
 const app = new PIXI.Application({ 
+  width: window.innerWidth,
+  height: window.innerHeight,
   autoDensity: true,
+  autoResize: true,
   resolution: window.devicePixelRatio
 })
 document.body.appendChild(app.view)
 
-let x = app.renderer.width / (window.devicePixelRatio * 2)
-let y = app.renderer.height / (window.devicePixelRatio * 2)
+window.addEventListener('resize', () => {
+  console.log('resize...')
+  app.renderer.resize(window.innerWidth, window.innerHeight)
+})
 
-const graphics = new PIXI.Graphics()
-graphics.x = x
-graphics.y = y
+// TODO:用独显测试 100000 
+for (let i = 0; i < 10000; i++) {
+  let x = ~~(window.innerWidth * Math.random())
+  let y = ~~(window.innerHeight * Math.random())
+  let colors = [0xFF9900, 0x0099ff, 0xffff00]
 
-// 正方形
-graphics.beginFill(0xFF9900)
-graphics.drawRect(0, 0, 100, 100)
-graphics.endFill()
-
-app.stage.addChild(graphics)
-
-console.log(graphics)
-
-function tick() {
-  graphics.rotation = 0
-  // TweenMax.to(graphics, 1, {
-  //   pixi: { rotation: 180, alpha: 0},
-  //   ease: Power0.easeNone,
-  //   // repeat: -1,
-  //   onComplete: () => {
-  //     TweenMax.to(graphics, 1, {
-  //       pixi: { rotation: 360, alpha: 1},
-  //       ease: Power0.easeNone,
-  //       // repeat: -1,
-  //       onComplete: tick
-  //     })
-  //   }
-  // })
-
-  let tl = new TimelineLite()
-  tl.to(graphics, 1, {
-    pixi: { rotation: 180, alpha: 0},
+  const graphics = new PIXI.Graphics()
+  graphics.x = x
+  graphics.y = y
+  
+  // 正方形
+  graphics.beginFill(colors[ i % colors.length])
+  graphics.drawRect(0, 0, 100, 100)
+  graphics.alpha = 0
+  graphics.endFill()
+  
+  app.stage.addChild(graphics)
+  
+  gasp.timeline({
+    repeat: -1,
+    delay: Math.random() * 5
+  })
+  .to(graphics, 2, {
+    pixi: { rotation: 180, alpha: 1},
     ease: Power0.easeNone,
-  }).to(graphics, 1, {
-    pixi: { rotation: 360, alpha: 1},
+  })
+  .to(graphics, 2, {
+    pixi: { rotation: 360, alpha: 0},
     ease: Power0.easeNone,
   })
 }
-
-tick()
-
-// TweenMax.to(graphics, 1, {
-//   x: 100,
-//   delay: 3
-// })
