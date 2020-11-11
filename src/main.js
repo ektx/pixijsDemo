@@ -49,4 +49,8 @@ for (let i = 0; i < 10000; i++) {
     pixi: { rotation: 360, alpha: 0},
     ease: Power0.easeNone,
   })
+
+  // app.ticker.add(() => {
+  //   graphics.rotation += 0.05
+  // })
 }
