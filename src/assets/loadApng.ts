@@ -13,11 +13,13 @@ async function init()
     document.body.appendChild(app.canvas);
 
     // Load a texture from a URL
-    const png = await fetch('/imgs/sun.png')
+    // const png = await fetch('/imgs/sun.png')
+    const png = await fetch('/imgs/sun.webp')
 
     // @ts-ignore
     const imageDecoder = new ImageDecoder({
-        type: 'image/png',
+        type: 'image/webp',
+        // type: 'image/png',
         data: png.body
     })
 
